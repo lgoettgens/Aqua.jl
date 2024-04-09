@@ -14,6 +14,18 @@ end
 include("pkg/Versions.jl")
 using .Versions: VersionSpec, semver_spec
 
+function __init__()
+    if VERSION >= v"1.9"
+        @eval Main begin # note that we import in module Main to avoid the dependency error
+            import Pkg
+            Pkg.add("ExplicitImports")
+            using ExplicitImports
+        end
+    end
+end
+
+function test_stale_imports end
+
 include("utils.jl")
 include("ambiguities.jl")
 include("unbound_args.jl")
